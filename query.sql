@@ -1,0 +1,1 @@
+with my_cte as (select sum(case when a=1 then 1 else 0 end) as pivoted from table) select * from my_cte

@@ -12,6 +12,7 @@ from __future__ import division
 from __future__ import unicode_literals
 
 import re
+import pdb
 
 from contextlib import contextmanager
 
@@ -370,17 +371,21 @@ class Formatter:
 
     def columns(self, json):
         self.document.add('select')
-        self.document.newline()
-        with self.document.indented():
-            for i, column in enumerate(json.columns):
-                if self.document.commas == 'front' and i != 0:
-                    self.document.add(', ')
 
-                self.add_column(column)
+        if len(json.columns) == 1 and json.columns[0] == '*':
+            self.document.add(' * ')
+        else:
+            self.document.newline()
+            with self.document.indented():
+                for i, column in enumerate(json.columns):
+                    if self.document.commas == 'front' and i != 0:
+                        self.document.add(', ')
 
-                if self.document.commas == 'back' and i != len(json.columns)-1:
-                    self.document.add(',')
-                self.document.newline()
+                    self.add_column(column)
+
+                    if self.document.commas == 'back' and i != len(json.columns)-1:
+                        self.document.add(',')
+                    self.document.newline()
 
     # This ain't it :/
     def add_from(self, from_):

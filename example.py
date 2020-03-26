@@ -1,13 +1,19 @@
 
 import sql_parser
 from format import Formatter
+import argparse
+
+argparser = argparse.ArgumentParser()
+argparser.add_argument("filepath")
+args = argparser.parse_args()
 
 parser = sql_parser.BigQueryViewParser()
-sql = """
-with my_cte as (select sum(case when a=1 then 1 else 0 end) as pivoted from table) select * from my_cte
-"""
+
+with open(args.filepath, 'r') as f:
+    sql = f.read()
 
 ast = parser._parse(sql)
+
 f = Formatter()
 f.format(ast)
 f.document.pprint()
